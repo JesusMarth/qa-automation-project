@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Task Manager Application', () => {
-  test('debería mostrar la página principal con formulario y lista vacía', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
+    // Navegar una sola vez antes de cada test
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    
+    await page.waitForLoadState('domcontentloaded'); // Más rápido que networkidle
+  });
+
+  test('debería mostrar la página principal con formulario y lista vacía', async ({ page }) => {
     // Verificar elementos principales
     await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas');
     await expect(page.locator('h5').filter({ hasText: 'Nueva Tarea' })).toBeVisible();
@@ -18,9 +21,6 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería crear una nueva tarea', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    
     // Llenar formulario
     await page.fill('input[placeholder="Título de la tarea"]', 'Tarea de prueba E2E');
     await page.fill('textarea[placeholder="Descripción de la tarea"]', 'Descripción de prueba');
@@ -37,9 +37,6 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería validar campos requeridos', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    
     // Intentar crear tarea sin título
     await page.click('button:has-text("Crear Tarea")');
     
@@ -51,9 +48,6 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería editar una tarea existente', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    
     // Crear tarea para editar
     await page.fill('input[placeholder="Título de la tarea"]', 'Tarea para editar');
     await page.fill('textarea[placeholder="Descripción de la tarea"]', 'Descripción original');
@@ -75,9 +69,6 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería eliminar una tarea', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    
     // Crear tarea para eliminar
     await page.fill('input[placeholder="Título de la tarea"]', 'Tarea para eliminar');
     await page.fill('textarea[placeholder="Descripción de la tarea"]', 'Descripción');
@@ -101,9 +92,6 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería navegar a la página de autenticación', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    
     // Navegar a autenticación
     await page.click('a:has-text("Autenticación")');
     
@@ -114,8 +102,9 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería cambiar entre modo login y registro', async ({ page }) => {
+    // Ir directamente a la página de autenticación
     await page.goto('/auth');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     
     // Verificar que está en modo login por defecto
     await expect(page.locator('h2')).toContainText('Autenticación');
@@ -134,8 +123,9 @@ test.describe('Task Manager Application', () => {
   });
 
   test('debería manejar errores de validación en autenticación', async ({ page }) => {
+    // Ir directamente a la página de autenticación
     await page.goto('/auth');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     
     // Cambiar a modo registro
     await page.click('button:has-text("Registrarse")');
@@ -152,9 +142,6 @@ test.describe('Task Manager Application', () => {
   test('debería ser responsive en dispositivos móviles', async ({ page }) => {
     // Configurar viewport móvil
     await page.setViewportSize({ width: 375, height: 667 });
-    
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
     
     // Verificar que los elementos principales son visibles
     await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas');
