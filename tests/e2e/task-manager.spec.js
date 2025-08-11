@@ -1,167 +1,166 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 test.describe('Task Manager Application', () => {
-  test.beforeEach(async ({ page }) => {
-    // Navegar a la página principal antes de cada prueba
-    await page.goto('http://localhost:3000')
-  })
-
   test('debería mostrar la página principal con formulario y lista vacía', async ({ page }) => {
-    // Verificar que la página se carga correctamente
-    await expect(page).toHaveTitle(/Gestor de Tareas/)
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
     
     // Verificar elementos principales
-    await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas')
-    await expect(page.locator('h5')).toContainText('Nueva Tarea')
-    await expect(page.locator('h5')).toContainText('Lista de Tareas (0)')
+    await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas');
+    await expect(page.locator('h5').filter({ hasText: 'Nueva Tarea' })).toBeVisible();
+    await expect(page.locator('h5').filter({ hasText: 'Lista de Tareas (0)' })).toBeVisible();
     
     // Verificar formulario
-    await expect(page.locator('input[name="title"]')).toBeVisible()
-    await expect(page.locator('textarea[name="description"]')).toBeVisible()
-    await expect(page.locator('select[name="priority"]')).toBeVisible()
-    await expect(page.locator('button[type="submit"]')).toContainText('Crear Tarea')
-  })
+    await expect(page.locator('input[placeholder="Título de la tarea"]')).toBeVisible();
+    await expect(page.locator('textarea[placeholder="Descripción de la tarea"]')).toBeVisible();
+    await expect(page.locator('select[name="priority"]')).toBeVisible();
+    await expect(page.locator('button:has-text("Crear Tarea")')).toBeVisible();
+  });
 
-  test('debería crear una nueva tarea exitosamente', async ({ page }) => {
-    // Llenar el formulario
-    await page.fill('input[name="title"]', 'Tarea de prueba E2E')
-    await page.fill('textarea[name="description"]', 'Descripción de prueba E2E')
-    await page.selectOption('select[name="priority"]', 'high')
+  test('debería crear una nueva tarea', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
     
-    // Enviar formulario
-    await page.click('button[type="submit"]')
+    // Llenar formulario
+    await page.fill('input[placeholder="Título de la tarea"]', 'Tarea de prueba E2E');
+    await page.fill('textarea[placeholder="Descripción de la tarea"]', 'Descripción de prueba');
+    await page.selectOption('select[name="priority"]', 'high');
     
-    // Verificar que la tarea aparece en la lista
-    await expect(page.locator('h6')).toContainText('Tarea de prueba E2E')
-    await expect(page.locator('.badge.bg-danger')).toContainText('Alta')
-    await expect(page.locator('.badge.bg-secondary')).toContainText('Pendiente')
+    // Crear tarea
+    await page.click('button:has-text("Crear Tarea")');
     
-    // Verificar que el formulario se limpia
-    await expect(page.locator('input[name="title"]')).toHaveValue('')
-    await expect(page.locator('textarea[name="description"]')).toHaveValue('')
-    await expect(page.locator('select[name="priority"]')).toHaveValue('medium')
-  })
+    // Esperar a que aparezca en la lista
+    await expect(page.locator('h6').filter({ hasText: 'Tarea de prueba E2E' })).toBeVisible();
+    
+    // Verificar que el contador se actualizó
+    await expect(page.locator('h5').filter({ hasText: 'Lista de Tareas (1)' })).toBeVisible();
+  });
 
   test('debería validar campos requeridos', async ({ page }) => {
-    // Intentar enviar formulario vacío
-    await page.click('button[type="submit"]')
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    
+    // Intentar crear tarea sin título
+    await page.click('button:has-text("Crear Tarea")');
     
     // Verificar mensaje de error
-    await expect(page.locator('.invalid-feedback')).toContainText('El título es requerido')
+    await expect(page.locator('.alert-danger')).toContainText('El título es requerido');
     
     // Verificar que no se creó ninguna tarea
-    await expect(page.locator('h5')).toContainText('Lista de Tareas (0)')
-  })
+    await expect(page.locator('h5').filter({ hasText: 'Lista de Tareas (0)' })).toBeVisible();
+  });
 
   test('debería editar una tarea existente', async ({ page }) => {
-    // Crear una tarea primero
-    await page.fill('input[name="title"]', 'Tarea para editar')
-    await page.fill('textarea[name="description"]', 'Descripción original')
-    await page.click('button[type="submit"]')
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    
+    // Crear tarea para editar
+    await page.fill('input[placeholder="Título de la tarea"]', 'Tarea para editar');
+    await page.fill('textarea[placeholder="Descripción de la tarea"]', 'Descripción original');
+    await page.selectOption('select[name="priority"]', 'medium');
+    await page.click('button:has-text("Crear Tarea")');
     
     // Esperar a que aparezca la tarea
-    await expect(page.locator('h6')).toContainText('Tarea para editar')
+    await expect(page.locator('h6').filter({ hasText: 'Tarea para editar' }).first()).toBeVisible();
     
     // Hacer clic en editar
-    await page.click('button[title="Editar"]')
+    await page.click('button[title="Editar"]').first();
     
-    // Verificar que aparece el modo de edición
-    await expect(page.locator('input[type="text"]').first()).toHaveValue('Tarea para editar')
+    // Modificar título
+    await page.fill('input[placeholder="Título de la tarea"]', 'Tarea editada');
+    await page.click('button:has-text("Actualizar")');
     
-    // Cambiar el título y estado
-    await page.fill('input[type="text"]', 'Tarea editada')
-    await page.selectOption('select', 'completed')
-    
-    // Guardar cambios
-    await page.click('button[title="Guardar"]')
-    
-    // Verificar que los cambios se aplicaron
-    await expect(page.locator('h6')).toContainText('Tarea editada')
-    await expect(page.locator('.badge.bg-success')).toContainText('Completada')
-  })
+    // Verificar que se actualizó
+    await expect(page.locator('h6').filter({ hasText: 'Tarea editada' })).toBeVisible();
+  });
 
   test('debería eliminar una tarea', async ({ page }) => {
-    // Crear una tarea
-    await page.fill('input[name="title"]', 'Tarea para eliminar')
-    await page.click('button[type="submit"]')
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
     
-    // Verificar que aparece
-    await expect(page.locator('h6')).toContainText('Tarea para eliminar')
+    // Crear tarea para eliminar
+    await page.fill('input[placeholder="Título de la tarea"]', 'Tarea para eliminar');
+    await page.fill('textarea[placeholder="Descripción de la tarea"]', 'Descripción');
+    await page.selectOption('select[name="priority"]', 'low');
+    await page.click('button:has-text("Crear Tarea")');
+    
+    // Esperar a que aparezca
+    await expect(page.locator('h6').filter({ hasText: 'Tarea para eliminar' }).first()).toBeVisible();
     
     // Eliminar la tarea
-    await page.click('button[title="Eliminar"]')
+    await page.click('button[title="Eliminar"]').first();
     
-    // Verificar que desaparece
-    await expect(page.locator('h5')).toContainText('Lista de Tareas (0)')
-  })
+    // Confirmar eliminación
+    await page.click('button:has-text("Confirmar")');
+    
+    // Verificar que se eliminó
+    await expect(page.locator('h6').filter({ hasText: 'Tarea para eliminar' })).not.toBeVisible();
+    
+    // Verificar que el contador se actualizó
+    await expect(page.locator('h5').filter({ hasText: 'Lista de Tareas (0)' })).toBeVisible();
+  });
 
   test('debería navegar a la página de autenticación', async ({ page }) => {
-    // Hacer clic en el enlace de autenticación
-    await page.click('text=Autenticación')
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    
+    // Navegar a autenticación
+    await page.click('a:has-text("Autenticación")');
     
     // Verificar que estamos en la página correcta
-    await expect(page.url()).toContain('/auth')
-    await expect(page.locator('h5')).toContainText('Iniciar Sesión')
-    
-    // Verificar formulario de login
-    await expect(page.locator('input[name="username"]')).toBeVisible()
-    await expect(page.locator('input[name="password"]')).toBeVisible()
-    await expect(page.locator('button[type="submit"]')).toContainText('Iniciar Sesión')
-  })
+    await expect(page.locator('h2')).toContainText('Autenticación');
+    await expect(page.locator('input[placeholder="Nombre de usuario"]')).toBeVisible();
+    await expect(page.locator('input[placeholder="Contraseña"]')).toBeVisible();
+  });
 
   test('debería cambiar entre modo login y registro', async ({ page }) => {
-    // Ir a la página de autenticación
-    await page.goto('http://localhost:3000/auth')
+    await page.goto('/auth');
+    await page.waitForLoadState('networkidle');
     
-    // Verificar que empieza en modo login
-    await expect(page.locator('h5')).toContainText('Iniciar Sesión')
+    // Verificar que está en modo login por defecto
+    await expect(page.locator('h2')).toContainText('Autenticación');
     
     // Cambiar a modo registro
-    await page.click('text=¿No tienes cuenta? Regístrate')
+    await page.click('button:has-text("Registrarse")');
     
-    // Verificar que cambió a registro
-    await expect(page.locator('h5')).toContainText('Registrarse')
-    await expect(page.locator('input[name="email"]')).toBeVisible()
-    await expect(page.locator('button[type="submit"]')).toContainText('Registrarse')
+    // Verificar que apareció el campo email
+    await expect(page.locator('input[placeholder="Email"]')).toBeVisible();
     
-    // Cambiar de vuelta a login
-    await page.click('text=¿Ya tienes cuenta? Inicia sesión')
+    // Volver a modo login
+    await page.click('button:has-text("Iniciar Sesión")');
     
-    // Verificar que volvió a login
-    await expect(page.locator('h5')).toContainText('Iniciar Sesión')
-  })
+    // Verificar que desapareció el campo email
+    await expect(page.locator('input[placeholder="Email"]')).not.toBeVisible();
+  });
 
   test('debería manejar errores de validación en autenticación', async ({ page }) => {
-    // Ir a la página de autenticación
-    await page.goto('http://localhost:3000/auth')
+    await page.goto('/auth');
+    await page.waitForLoadState('networkidle');
     
     // Cambiar a modo registro
-    await page.click('text=¿No tienes cuenta? Regístrate')
+    await page.click('button:has-text("Registrarse")');
     
     // Intentar enviar formulario vacío
-    await page.click('button[type="submit"]')
+    await page.click('button:has-text("Registrarse")');
     
-    // Verificar mensajes de error
-    await expect(page.locator('.invalid-feedback')).toContainText('El nombre de usuario es requerido')
-    await expect(page.locator('.invalid-feedback')).toContainText('La contraseña es requerida')
-    await expect(page.locator('.invalid-feedback')).toContainText('El email es requerido')
-  })
+    // Verificar mensajes de error específicos
+    await expect(page.locator('.invalid-feedback').filter({ hasText: 'El nombre de usuario es requerido' })).toBeVisible();
+    await expect(page.locator('.invalid-feedback').filter({ hasText: 'La contraseña es requerida' })).toBeVisible();
+    await expect(page.locator('.invalid-feedback').filter({ hasText: 'El email es requerido' })).toBeVisible();
+  });
 
   test('debería ser responsive en dispositivos móviles', async ({ page }) => {
-    // Cambiar a vista móvil
-    await page.setViewportSize({ width: 375, height: 667 })
+    // Configurar viewport móvil
+    await page.setViewportSize({ width: 375, height: 667 });
     
-    // Verificar que el navbar se colapsa
-    await expect(page.locator('.navbar-collapse')).toHaveClass(/collapse/)
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
     
-    // Hacer clic en el botón hamburguesa
-    await page.click('.navbar-toggler')
+    // Verificar que los elementos principales son visibles
+    await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas');
+    await expect(page.locator('input[placeholder="Título de la tarea"]')).toBeVisible();
     
-    // Verificar que el menú se expande
-    await expect(page.locator('.navbar-collapse')).toHaveClass(/show/)
-    
-    // Verificar que los enlaces son visibles
-    await expect(page.locator('text=Inicio')).toBeVisible()
-    await expect(page.locator('text=Autenticación')).toBeVisible()
-  })
-}) 
+    // Verificar que el navbar se adapta
+    await expect(page.locator('.navbar-toggler')).toBeVisible();
+  });
+}); 

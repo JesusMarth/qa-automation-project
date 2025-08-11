@@ -13,7 +13,7 @@ test.describe('Demo Video Generation', () => {
     await page.waitForTimeout(2000);
     
     // Crear una nueva tarea
-    await page.click('text=Agregar Tarea');
+    await page.click('button:has-text("Crear Tarea")');
     await page.waitForTimeout(1000);
     
     await page.fill('input[placeholder="Título de la tarea"]', 'Demo Task para Portfolio');
@@ -25,7 +25,7 @@ test.describe('Demo Video Generation', () => {
     await page.waitForTimeout(2000);
     
     // Editar la tarea
-    await page.click('text=Editar');
+    await page.click('button[title="Editar"]').first();
     await page.waitForTimeout(1000);
     
     await page.fill('input[placeholder="Título de la tarea"]', 'Demo Task Editada - Portfolio QA');
@@ -35,11 +35,11 @@ test.describe('Demo Video Generation', () => {
     await page.waitForTimeout(2000);
     
     // Navegar a autenticación
-    await page.click('text=Autenticación');
+    await page.click('a:has-text("Autenticación")');
     await page.waitForTimeout(2000);
     
     // Mostrar formulario de registro
-    await page.click('text=Registrarse');
+    await page.click('button:has-text("Registrarse")');
     await page.waitForTimeout(1000);
     
     await page.fill('input[placeholder="Nombre de usuario"]', 'demo_user');
@@ -48,7 +48,7 @@ test.describe('Demo Video Generation', () => {
     await page.waitForTimeout(2000);
     
     // Volver a la página principal
-    await page.click('text=Inicio');
+    await page.click('a:has-text("Inicio")');
     await page.waitForTimeout(2000);
     
     // Mostrar la lista de tareas
@@ -74,7 +74,7 @@ test.describe('Demo Video Generation', () => {
     await page.waitForTimeout(2000);
     
     // Eliminar la tarea demo
-    await page.click('text=Eliminar');
+    await page.click('button[title="Eliminar"]').first();
     await page.waitForTimeout(1000);
     
     // Confirmar eliminación
