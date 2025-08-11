@@ -20,15 +20,23 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm ci
+    
+    - name: Install client dependencies
       run: |
+        cd client
         npm ci
-        cd client && npm ci
-        cd ../server && npm ci
+    
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm ci
     
     - name: Run unit tests
       run: |
-        cd client && npm run test:coverage
+        cd client
+        npm run test:coverage
     
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
@@ -49,22 +57,26 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm ci
+    
+    - name: Install server dependencies
       run: |
-        cd server && npm ci
+        cd server
+        npm ci
     
     - name: Start server
       run: |
         cd server
         npm start &
-        sleep 10
+        sleep 15
     
-    - name: Install Newman
+    - name: Install Newman globally
       run: npm install -g newman newman-reporter-html
     
     - name: Run API tests
       run: |
-        newman run tests/api/task-manager-api.postman_collection.json -r cli,html
+        newman run tests/api/task-manager-api.postman_collection.json -r cli,html --timeout 30000
     
     - name: Upload API test results
       uses: actions/upload-artifact@v4
@@ -86,23 +98,30 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm ci
+    
+    - name: Install client dependencies
       run: |
+        cd client
         npm ci
-        cd client && npm ci
-        cd ../server && npm ci
+    
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm ci
     
     - name: Install Playwright browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
     
     - name: Start application
       run: |
         cd server && npm start &
         cd ../client && npm run dev &
-        sleep 15
+        sleep 20
     
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --project=chromium
     
     - name: Upload Playwright results
       uses: actions/upload-artifact@v4
@@ -131,20 +150,27 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm ci
+    
+    - name: Install client dependencies
       run: |
+        cd client
         npm ci
-        cd client && npm ci
-        cd ../server && npm ci
+    
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm ci
     
     - name: Install Playwright browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
     
     - name: Start application
       run: |
         cd server && npm start &
         cd ../client && npm run dev &
-        sleep 15
+        sleep 20
     
     - name: Generate demo video
       run: |
@@ -171,11 +197,18 @@ jobs:
         node-version: '18'
         cache: 'npm'
     
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm ci
+    
+    - name: Install client dependencies
       run: |
+        cd client
         npm ci
-        cd client && npm ci
-        cd ../server && npm ci
+    
+    - name: Install server dependencies
+      run: |
+        cd server
+        npm ci
     
     - name: Build client
       run: cd client && npm run build
