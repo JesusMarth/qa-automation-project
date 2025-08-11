@@ -102,24 +102,45 @@ npm run test
 
 ### 5. Generate Portfolio Demo Video
 ```bash
-# Generate a demo video for your portfolio
+# Generate a comprehensive demo video for your portfolio
 npm run demo:video
 
-# The video will be saved in test-results/demo-video/
+# The video will be saved in test-results/
 # You can download it from GitHub Actions artifacts
 ```
 
 ## 🎥 Portfolio Demo Video
 
-This project automatically generates a demo video showcasing all the application features:
+This project automatically generates a **professional demo video** that demonstrates your QA automation skills:
 
-- **Task Management**: Create, edit, delete tasks with different priorities
-- **User Authentication**: Registration and login forms
-- **Responsive Design**: Mobile and desktop views
-- **API Documentation**: Swagger UI demonstration
-- **Modern UI**: Bootstrap 5 components and smooth interactions
+### 🧪 **Testing Capabilities**
+- **Unit Tests**: Jest coverage reports and component testing
+- **API Tests**: Newman test execution and security testing  
+- **E2E Tests**: Playwright automated UI testing
+- **CI/CD Pipeline**: GitHub Actions workflow demonstration
 
-The video is generated automatically in GitHub Actions and can be downloaded as an artifact. Perfect for your portfolio!
+### 🐛 **Bug Detection Skills**
+- **Security Vulnerabilities**: SQL injection, password exposure
+- **Validation Issues**: Input validation and rate limiting
+- **Test Results**: All bugs successfully detected by automated tests
+
+### 📊 **Professional Reports**
+- **Coverage Reports**: Jest HTML coverage reports
+- **API Test Results**: Newman HTML reports with detailed results
+- **E2E Evidence**: Screenshots and video recordings
+- **CI/CD Logs**: Complete GitHub Actions execution logs
+
+### 🎯 **Portfolio Value**
+- **Technical Skills**: Full-stack development + QA automation
+- **Testing Expertise**: Multi-level testing strategy
+- **DevOps Knowledge**: CI/CD pipeline implementation
+- **Security Awareness**: Vulnerability detection and reporting
+
+The video is perfect for:
+- **Job Interviews**: Demonstrate your QA automation skills
+- **Portfolio**: Show real testing capabilities
+- **LinkedIn**: Professional content showcasing expertise
+- **GitHub**: Visual demonstration of project value
 
 ## 🐛 Intentional Bugs & Vulnerabilities
 
