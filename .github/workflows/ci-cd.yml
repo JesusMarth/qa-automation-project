@@ -21,7 +21,7 @@ jobs:
         cache: 'npm'
     
     - name: Install root dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
     
     - name: Install client dependencies
       run: |
@@ -58,7 +58,7 @@ jobs:
         cache: 'npm'
     
     - name: Install root dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
     
     - name: Install server dependencies
       run: |
@@ -71,12 +71,9 @@ jobs:
         npm start &
         sleep 15
     
-    - name: Install Newman globally
-      run: npm install -g newman newman-reporter-html
-    
-    - name: Run API tests
+    - name: Run API tests with local Newman
       run: |
-        newman run tests/api/task-manager-api.postman_collection.json -r cli,html --timeout 30000
+        npx newman run tests/api/task-manager-api.postman_collection.json -r cli,html --timeout 30000
     
     - name: Upload API test results
       uses: actions/upload-artifact@v4
@@ -99,7 +96,7 @@ jobs:
         cache: 'npm'
     
     - name: Install root dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
     
     - name: Install client dependencies
       run: |
@@ -151,7 +148,7 @@ jobs:
         cache: 'npm'
     
     - name: Install root dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
     
     - name: Install client dependencies
       run: |
@@ -198,7 +195,7 @@ jobs:
         cache: 'npm'
     
     - name: Install root dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
     
     - name: Install client dependencies
       run: |
