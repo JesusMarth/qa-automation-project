@@ -5,6 +5,10 @@ test.describe('Task Manager Application', () => {
     // Navegar una sola vez antes de cada test
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded'); // Más rápido que networkidle
+    
+    // Esperar a que los elementos críticos estén disponibles
+    await page.waitForSelector('input[placeholder="Título de la tarea"]', { timeout: 10000 });
+    await page.waitForSelector('button:has-text("Crear Tarea")', { timeout: 10000 });
   });
 
   test('debería mostrar la página principal con formulario y lista vacía', async ({ page }) => {
@@ -95,6 +99,9 @@ test.describe('Task Manager Application', () => {
     // Navegar a autenticación
     await page.click('a:has-text("Autenticación")');
     
+    // Esperar a que la página se cargue
+    await page.waitForLoadState('domcontentloaded');
+    
     // Verificar que estamos en la página correcta
     await expect(page.locator('h2')).toContainText('Autenticación');
     await expect(page.locator('input[placeholder="Nombre de usuario"]')).toBeVisible();
@@ -105,6 +112,9 @@ test.describe('Task Manager Application', () => {
     // Ir directamente a la página de autenticación
     await page.goto('/auth');
     await page.waitForLoadState('domcontentloaded');
+    
+    // Esperar a que los elementos estén disponibles
+    await page.waitForSelector('h2', { timeout: 10000 });
     
     // Verificar que está en modo login por defecto
     await expect(page.locator('h2')).toContainText('Autenticación');
@@ -126,6 +136,9 @@ test.describe('Task Manager Application', () => {
     // Ir directamente a la página de autenticación
     await page.goto('/auth');
     await page.waitForLoadState('domcontentloaded');
+    
+    // Esperar a que los elementos estén disponibles
+    await page.waitForSelector('button:has-text("Registrarse")', { timeout: 10000 });
     
     // Cambiar a modo registro
     await page.click('button:has-text("Registrarse")');

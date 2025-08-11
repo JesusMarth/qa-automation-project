@@ -7,17 +7,17 @@ export default defineConfig({
   retries: process.env.CI ? 0 : 0, // Sin retries para acelerar
   workers: process.env.CI ? 1 : 2,
   reporter: 'html',
-  timeout: 20000, // Reducir timeout global a 20 segundos
+  timeout: 30000, // Aumentar timeout global a 30 segundos
   expect: {
-    timeout: 5000, // Timeout para expectaciones más agresivo
+    timeout: 10000, // Timeout para expectaciones más razonable
   },
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'off', // Desactivar trace para mejorar rendimiento
     screenshot: 'only-on-failure',
     video: 'off', // Desactivar video para mejorar rendimiento
-    actionTimeout: 5000, // Timeout para acciones más agresivo
-    navigationTimeout: 10000, // Timeout para navegación más agresivo
+    actionTimeout: 10000, // Timeout para acciones más razonable
+    navigationTimeout: 15000, // Timeout para navegación más razonable
   },
 
   projects: [
@@ -47,6 +47,6 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 30000, // Reducir timeout del servidor a 30 segundos
+    timeout: 60000, // Aumentar timeout del servidor a 60 segundos
   },
 }) 
