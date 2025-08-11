@@ -1,0 +1,33 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apk add --no-cache chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont
+
+# Copiar package.json principal
+COPY package*.json ./
+
+# Instalar dependencias principales
+RUN npm ci
+
+# Copiar código fuente
+COPY . .
+
+# Instalar dependencias del servidor
+WORKDIR /app/server
+RUN npm ci
+
+# Instalar dependencias del cliente
+WORKDIR /app/client
+RUN npm ci
+
+# Volver al directorio raíz
+WORKDIR /app
+
+# Configurar Playwright para usar Chromium del sistema
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+# Comando por defecto
+CMD ["npm", "run", "test"] 

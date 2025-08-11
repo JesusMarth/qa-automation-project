@@ -1,0 +1,161 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Pruebas unitarias
+  unit-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd client && npm ci
+        cd ../server && npm ci
+    
+    - name: Run unit tests
+      run: |
+        cd client && npm run test:coverage
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./client/coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  # Pruebas de API
+  api-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        cd server && npm ci
+    
+    - name: Start server
+      run: |
+        cd server
+        npm start &
+        sleep 10
+    
+    - name: Install Newman
+      run: npm install -g newman newman-reporter-html
+    
+    - name: Run API tests
+      run: |
+        newman run tests/api/task-manager-api.postman_collection.json -r cli,html
+    
+    - name: Upload API test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: api-test-results
+        path: newman/
+
+  # Pruebas E2E con Playwright
+  e2e-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd client && npm ci
+        cd ../server && npm ci
+    
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+    
+    - name: Start application
+      run: |
+        cd server && npm start &
+        cd ../client && npm run dev &
+        sleep 15
+    
+    - name: Run Playwright tests
+      run: npx playwright test
+    
+    - name: Upload Playwright results
+      uses: actions/upload-artifact@v3
+      with:
+        name: playwright-results
+        path: playwright-report/
+    
+    - name: Upload Playwright screenshots
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: playwright-screenshots
+        path: test-results/
+
+  # Construcción y despliegue
+  build-and-deploy:
+    needs: [unit-tests, api-tests, e2e-tests]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd client && npm ci
+        cd ../server && npm ci
+    
+    - name: Build client
+      run: cd client && npm run build
+    
+    - name: Build Docker images
+      run: |
+        docker build -t task-manager-server ./server
+        docker build -t task-manager-client ./client
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: |
+          client/dist/
+          server/
+    
+    - name: Deploy to staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Aquí irían los comandos de despliegue reales
+        # Por ejemplo: kubectl apply, docker push, etc. 
