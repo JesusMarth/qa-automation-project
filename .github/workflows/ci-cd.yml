@@ -118,7 +118,7 @@ jobs:
         sleep 20
     
     - name: Run Playwright tests
-      run: npx playwright test --project=chromium
+      run: npx playwright test --config=playwright.config.js --project=chromium
     
     - name: Upload Playwright results
       uses: actions/upload-artifact@v4
@@ -171,7 +171,7 @@ jobs:
     
     - name: Generate demo video
       run: |
-        npx playwright test tests/e2e/demo-video.spec.js --project=chromium
+        npx playwright test tests/e2e/demo-video.spec.js --config=playwright.config.js --project=chromium
     
     - name: Upload demo video
       uses: actions/upload-artifact@v4

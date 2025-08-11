@@ -390,7 +390,7 @@
               "    var jsonData = pm.response.json();",
               "    if (jsonData.length > 0) {",
               "        pm.expect(jsonData[0]).to.have.property('password');",
-              "        pm.test.fail('VULNERABILIDAD: Las contraseñas están expuestas en texto plano');",
+              "        pm.expect.fail('VULNERABILIDAD: Las contraseñas están expuestas en texto plano');",
               "    }",
               "});"
             ],

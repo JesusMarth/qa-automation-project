@@ -24,6 +24,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "playwright": "^1.40.0",
+    "@playwright/test": "^1.40.0",
     "newman": "^4.6.1",
     "newman-reporter-html": "^1.0.5"
   }
