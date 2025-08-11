@@ -4,14 +4,20 @@ export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 1 : 2,
   reporter: 'html',
+  timeout: 30000, // Reducir timeout global a 30 segundos
+  expect: {
+    timeout: 10000, // Timeout para expectaciones
+  },
   use: {
     baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
+    trace: 'off', // Desactivar trace para mejorar rendimiento
     screenshot: 'only-on-failure',
-    video: 'on-first-retry',
+    video: 'off', // Desactivar video para mejorar rendimiento
+    actionTimeout: 10000, // Timeout para acciones
+    navigationTimeout: 15000, // Timeout para navegación
   },
 
   projects: [
@@ -41,6 +47,6 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 60000, // Reducir timeout del servidor
   },
 }) 
