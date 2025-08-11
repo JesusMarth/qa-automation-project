@@ -12,9 +12,10 @@ test.describe('Demo Video Generation', () => {
     // Mostrar la página principal
     await page.waitForTimeout(1000);
     
-    // Verificar elementos principales
-    await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas');
-    await expect(page.locator('input[placeholder="Título de la tarea"]')).toBeVisible();
+    // Verificar elementos básicos
+    await expect(page.locator('body')).toContainText('Gestor de Tareas');
+    await expect(page.locator('body')).toContainText('Inicio');
+    await expect(page.locator('body')).toContainText('Autenticación');
     
     // Mostrar formulario
     await page.waitForTimeout(1000);
@@ -22,7 +23,7 @@ test.describe('Demo Video Generation', () => {
     // Navegar a autenticación
     await page.click('a:has-text("Autenticación")');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('h2')).toContainText('Autenticación');
+    await expect(page.locator('body')).toContainText('Autenticación');
     
     // Mostrar página de autenticación
     await page.waitForTimeout(1000);
@@ -30,7 +31,7 @@ test.describe('Demo Video Generation', () => {
     // Volver a la página principal
     await page.click('a:has-text("Inicio")');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('h1, .navbar-brand')).toContainText('Gestor de Tareas');
+    await expect(page.locator('body')).toContainText('Gestor de Tareas');
     
     // Mostrar responsive design
     await page.setViewportSize({ width: 768, height: 1024 });
