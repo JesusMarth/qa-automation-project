@@ -27,12 +27,10 @@ const TaskForm = ({ onSubmit }) => {
   const validateForm = () => {
     const newErrors = {}
     
-    // BUG INTENCIONAL: Validación muy básica
     if (!formData.title.trim()) {
       newErrors.title = 'El título es requerido'
     }
     
-    // BUG INTENCIONAL: No valida longitud máxima
     if (formData.title.length > 100) {
       newErrors.title = 'El título es muy largo'
     }

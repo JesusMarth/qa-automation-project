@@ -36,10 +36,9 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// BUG INTENCIONAL #1: Rate limiting muy permisivo (debería ser más restrictivo)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 1000, // BUG: Demasiado permisivo, debería ser 100
+  max: 1000, // Demasiado permisivo
   message: 'Demasiadas solicitudes desde esta IP'
 });
 app.use('/api/', limiter);
@@ -48,7 +47,6 @@ app.use('/api/', limiter);
 const dbPath = path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbPath);
 
-// BUG INTENCIONAL #2: No hay validación de entrada en la creación de tablas
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,7 +58,6 @@ db.serialize(() => {
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
   
-  // BUG INTENCIONAL #3: Tabla de usuarios sin encriptación de contraseñas
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
@@ -82,13 +79,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// BUG INTENCIONAL #4: Manejo de errores global muy básico
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Algo salió mal!' }); // BUG: No debería exponer detalles internos
+  res.status(500).json({ error: 'Algo salió mal!' });
 });
 
-// BUG INTENCIONAL #5: Puerto hardcodeado en lugar de usar variable de entorno
 app.listen(3001, () => {
   console.log(`Servidor ejecutándose en puerto ${PORT}`);
   console.log(`Documentación disponible en: http://localhost:${PORT}/api-docs`);

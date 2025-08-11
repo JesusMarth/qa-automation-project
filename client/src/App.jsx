@@ -11,7 +11,6 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // BUG INTENCIONAL #6: No hay manejo de errores en el useEffect
   useEffect(() => {
     fetchTasks()
   }, [])

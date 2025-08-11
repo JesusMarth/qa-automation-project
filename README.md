@@ -1,4 +1,4 @@
-# QA Automation Portfolio - Task Manager Application
+# QA Automation Portfolio - Project Management System
 
 A comprehensive QA automation portfolio project demonstrating skills in testing, development, and CI/CD. This project includes a full-stack web application with intentional bugs and vulnerabilities for testing purposes.
 
@@ -199,14 +199,14 @@ docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 
 ### Production Build
 ```bash
-docker build -t task-manager-server ./server
-docker build -t task-manager-client ./client
+docker build -t project-management-server ./server
+docker build -t project-management-client ./client
 ```
 
 ## 📱 Features
 
-### Task Management
-- ✅ Create, Read, Update, Delete tasks
+### Project Management
+- ✅ Create, Read, Update, Delete projects
 - ✅ Priority levels (Low, Medium, High)
 - ✅ Status tracking (Pending, In Progress, Completed)
 - ✅ Real-time updates
@@ -271,7 +271,7 @@ VITE_API_URL=http://localhost:3001
 ### Database
 - **Type**: SQLite
 - **Location**: `server/database.sqlite`
-- **Tables**: `tasks`, `users`
+- **Tables**: `projects`, `users`
 
 ## 📚 API Documentation
 
@@ -281,10 +281,10 @@ http://localhost:3001/api-docs
 ```
 
 ### Key Endpoints
-- `GET /api/tasks` - List all tasks
-- `POST /api/tasks` - Create new task
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task
+- `GET /api/projects` - List all projects
+- `POST /api/projects` - Create new project
+- `PUT /api/projects/:id` - Update project
+- `DELETE /api/projects/:id` - Delete project
 - `POST /api/users` - User registration
 - `POST /api/users/login` - User authentication
 

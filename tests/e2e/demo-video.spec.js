@@ -2,33 +2,23 @@ import { test, expect } from '@playwright/test';
 
 test.describe('QA Portfolio Demo - Testing Demonstration', () => {
   test('Generate comprehensive testing demo video', async ({ page }) => {
-    // Configurar video en alta calidad
     await page.setViewportSize({ width: 1920, height: 1080 });
     
-    // ===== SECCIÓN 1: INTRODUCCIÓN DEL PROYECTO =====
     await page.goto('/');
     await page.waitForLoadState('networkidle');
-    
-    // Mostrar título del proyecto
     await page.waitForTimeout(1000);
     await expect(page.locator('body')).toContainText('Gestor de Tareas');
     
-    // ===== SECCIÓN 2: DEMOSTRACIÓN DE LA APLICACIÓN =====
-    // Mostrar formulario de tareas
     await page.waitForTimeout(800);
     
-    // Navegar a autenticación
     await page.click('a:has-text("Autenticación")');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(800);
     
-    // Volver a inicio
     await page.click('a:has-text("Inicio")');
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(800);
     
-    // ===== SECCIÓN 3: DEMOSTRACIÓN DE TESTING =====
-    // Simular ejecución de tests unitarios
     await page.evaluate(() => {
       const div = document.createElement('div');
       div.innerHTML = `
@@ -44,7 +34,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // Simular ejecución de tests de API
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -57,7 +46,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // Simular ejecución de tests E2E
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -70,7 +58,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // ===== SECCIÓN 4: DEMOSTRACIÓN DE CI/CD =====
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -84,7 +71,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // ===== SECCIÓN 5: DEMOSTRACIÓN DE BUGS DETECTADOS =====
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -98,7 +84,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // ===== SECCIÓN 6: DEMOSTRACIÓN DE TECNOLOGÍAS =====
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -112,7 +97,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // ===== SECCIÓN 7: CONCLUSIÓN =====
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -126,13 +110,11 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     await page.waitForTimeout(1500);
     
-    // Limpiar overlay
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       if (div) div.remove();
     });
     
-    // Mostrar aplicación final
     await page.waitForTimeout(1000);
   });
 });
