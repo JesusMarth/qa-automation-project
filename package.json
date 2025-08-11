@@ -13,6 +13,7 @@
     "test:e2e": "playwright test",
     "test:api": "newman run tests/api/task-manager-api.postman_collection.json -r cli,html",
     "test:coverage": "cd client && npm run test:coverage",
+    "demo:video": "playwright test tests/e2e/demo-video.spec.js --project=chromium --video=on",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:test": "docker-compose -f docker-compose.test.yml up --abort-on-container-exit"

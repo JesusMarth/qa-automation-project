@@ -100,6 +100,27 @@ npx playwright test --ui
 npm run test
 ```
 
+### 5. Generate Portfolio Demo Video
+```bash
+# Generate a demo video for your portfolio
+npm run demo:video
+
+# The video will be saved in test-results/demo-video/
+# You can download it from GitHub Actions artifacts
+```
+
+## 🎥 Portfolio Demo Video
+
+This project automatically generates a demo video showcasing all the application features:
+
+- **Task Management**: Create, edit, delete tasks with different priorities
+- **User Authentication**: Registration and login forms
+- **Responsive Design**: Mobile and desktop views
+- **API Documentation**: Swagger UI demonstration
+- **Modern UI**: Bootstrap 5 components and smooth interactions
+
+The video is generated automatically in GitHub Actions and can be downloaded as an artifact. Perfect for your portfolio!
+
 ## 🐛 Intentional Bugs & Vulnerabilities
 
 This application contains **6 intentional bugs** designed to demonstrate testing skills:
