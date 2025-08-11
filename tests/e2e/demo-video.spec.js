@@ -10,22 +10,22 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     await page.waitForLoadState('networkidle');
     
     // Mostrar título del proyecto
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
     await expect(page.locator('body')).toContainText('Gestor de Tareas');
     
     // ===== SECCIÓN 2: DEMOSTRACIÓN DE LA APLICACIÓN =====
     // Mostrar formulario de tareas
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(800);
     
     // Navegar a autenticación
     await page.click('a:has-text("Autenticación")');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(800);
     
     // Volver a inicio
     await page.click('a:has-text("Inicio")');
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(800);
     
     // ===== SECCIÓN 3: DEMOSTRACIÓN DE TESTING =====
     // Simular ejecución de tests unitarios
@@ -42,7 +42,7 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
       `;
       document.body.appendChild(div);
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
     // Simular ejecución de tests de API
     await page.evaluate(() => {
@@ -55,7 +55,7 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
         <p>⚠️ Security Tests - PASS (bugs detectados)</p>
       `;
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
     // Simular ejecución de tests E2E
     await page.evaluate(() => {
@@ -68,7 +68,7 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
         <p>✅ UI Elements - PASS</p>
       `;
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
     // ===== SECCIÓN 4: DEMOSTRACIÓN DE CI/CD =====
     await page.evaluate(() => {
@@ -82,7 +82,7 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
         <p>✅ Build & Deploy - SUCCESS</p>
       `;
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
     // ===== SECCIÓN 5: DEMOSTRACIÓN DE BUGS DETECTADOS =====
     await page.evaluate(() => {
@@ -96,23 +96,9 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
         <p>✅ Todos detectados por tests</p>
       `;
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
-    // ===== SECCIÓN 6: DEMOSTRACIÓN DE REPORTES =====
-    await page.evaluate(() => {
-      const div = document.querySelector('div[style*="background: #28a745"]');
-      div.innerHTML = `
-        <h4>📊 Reportes Generados</h4>
-        <p>📈 Jest Coverage Report</p>
-        <p>📋 Newman HTML Report</p>
-        <p>🎬 Playwright Video Demo</p>
-        <p>📱 Screenshots de Tests</p>
-        <p>🚀 GitHub Actions Logs</p>
-      `;
-    });
-    await page.waitForTimeout(3000);
-    
-    // ===== SECCIÓN 7: DEMOSTRACIÓN DE TECNOLOGÍAS =====
+    // ===== SECCIÓN 6: DEMOSTRACIÓN DE TECNOLOGÍAS =====
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -124,9 +110,9 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
         <p>🔒 Swagger + Helmet</p>
       `;
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
-    // ===== SECCIÓN 8: CONCLUSIÓN =====
+    // ===== SECCIÓN 7: CONCLUSIÓN =====
     await page.evaluate(() => {
       const div = document.querySelector('div[style*="background: #28a745"]');
       div.innerHTML = `
@@ -138,7 +124,7 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
         <p>🚀 Listo para producción</p>
       `;
     });
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1500);
     
     // Limpiar overlay
     await page.evaluate(() => {
@@ -147,6 +133,6 @@ test.describe('QA Portfolio Demo - Testing Demonstration', () => {
     });
     
     // Mostrar aplicación final
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(1000);
   });
 });
