@@ -295,14 +295,6 @@ http://localhost:3001/api-docs
 3. **Error Handling**: Basic error messages
 4. **Validation**: Minimal input validation
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
 
 ## 📄 License
 
@@ -310,14 +302,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-Your Name - QA Automation Engineer
+Jesús Martín Saldaña - QA Automation Engineer
 
-## 🙏 Acknowledgments
-
-- React team for the amazing framework
-- Playwright team for excellent E2E testing
-- Jest team for robust unit testing
-- Bootstrap team for responsive UI components
 
 ---
 
