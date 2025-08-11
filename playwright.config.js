@@ -7,6 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 0 : 0, // Sin retries para acelerar
   workers: process.env.CI ? 1 : 2,
   reporter: 'html',
+  outputDir: 'test-results/', // Directorio específico para resultados
   timeout: 30000, // Aumentar timeout global a 30 segundos
   expect: {
     timeout: 10000, // Timeout para expectaciones más razonable
@@ -14,8 +15,8 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'off', // Desactivar trace para mejorar rendimiento
-    screenshot: 'only-on-failure',
-    video: 'off', // Desactivar video para mejorar rendimiento
+    screenshot: 'on', // Habilitar screenshots para video demo
+    video: 'on', // Habilitar video para video demo
     actionTimeout: 10000, // Timeout para acciones más razonable
     navigationTimeout: 15000, // Timeout para navegación más razonable
   },
