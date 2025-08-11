@@ -68,7 +68,8 @@ jobs:
         newman run tests/api/task-manager-api.postman_collection.json -r cli,html
     
     - name: Upload API test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: api-test-results
         path: newman/
@@ -147,7 +148,7 @@ jobs:
         docker build -t task-manager-client ./client
     
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifacts
         path: |
